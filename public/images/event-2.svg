@@ -1,0 +1,6 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#F3F3F3" />
+  <rect x="70" y="70" width="660" height="320" fill="#1B1B1B" />
+  <path d="M70 410H730L680 540H120L70 410Z" fill="#E31837" />
+  <text x="120" y="500" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="34" font-weight="700">CULTURAL</text>
+</svg>
