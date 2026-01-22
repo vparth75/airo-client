@@ -7,7 +7,7 @@ export type EventItem = {
   date: string;
   time: string;
   image: string;
-  tag?: string;
+  categories?: string[];
 };
 
 export default function EventCard({ event }: { event: EventItem }) {
@@ -20,14 +20,12 @@ export default function EventCard({ event }: { event: EventItem }) {
           fill
           className="object-cover transition duration-500 group-hover:scale-105"
         />
-        {event.tag && (
-          <span className="absolute left-4 top-4 rounded-full bg-[#e31837] px-3 py-1 text-xs font-semibold text-white">
-            {event.tag}
-          </span>
-        )}
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5">
         <h3 className="text-lg font-semibold text-white">{event.title}</h3>
+        {event.categories && event.categories.length > 0 && (
+          <p className="text-sm text-white/70">{event.categories.join(" · ")}</p>
+        )}
       </div>
     </article>
   );
