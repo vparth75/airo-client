@@ -15,7 +15,29 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AIRO 2026",
   description:
-    "A modern, sporty landing page for the AIRO 2026 college fest experience.",
+    "AIRO 2026 • Mahindra University",
+  metadataBase: new URL("https://mu-airo.com"),
+  openGraph: {
+    title: "AIRO 2026",
+    description: "AIRO 2026 • Mahindra University",
+    url: "https://mu-airo.com",
+    siteName: "AIRO 2026",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "AIRO 2026",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AIRO 2026",
+    description: "AIRO 2026 • Mahindra University",
+    images: ["/twitter-image"],
+  },
   icons: {
     icon: "/favicon.png",
   },
