@@ -7,6 +7,8 @@ import { useAuth } from "../context/AuthContext";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
+
 interface SportEvent {
   id: string;
   sport: string;
@@ -65,7 +67,7 @@ function GenderSelector() {
     setError("");
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/auth/me", {
+      const res = await fetch(`${API_URL}/auth/me`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -248,7 +250,7 @@ function RegistrationModal({ event, onClose, onSuccess }: RegistrationModalProps
         body.teamMembers = teamMembers;
       }
 
-      const res = await fetch("http://localhost:3000/registrations", {
+      const res = await fetch(`${API_URL}/registrations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -477,7 +479,7 @@ export default function RegisterPage() {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch("http://localhost:3000/events");
+      const res = await fetch(`${API_URL}/events`);
       if (!res.ok) throw new Error("Failed to fetch events");
       const data = await res.json();
       setEvents(data);

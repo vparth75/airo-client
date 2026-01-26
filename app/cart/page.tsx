@@ -8,6 +8,8 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import Link from "next/link";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
+
 interface TeamMember {
   id: string;
   name: string;
@@ -80,7 +82,7 @@ export default function CartPage() {
   const fetchRegistrations = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/registrations", {
+      const res = await fetch(`${API_URL}/registrations`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -101,7 +103,7 @@ export default function CartPage() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:3000/registrations/${registrationId}`, {
+      const res = await fetch(`${API_URL}/registrations/${registrationId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
