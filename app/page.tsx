@@ -176,15 +176,18 @@ export default function Home() {
                 Register
               </p>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight">
-                Registrations opening soon.
+                Ready to compete?
               </h2>
               <p className="mt-2 text-base text-white/85">
-                Stay tuned for the registration launch and event updates.
+                Register now for AIRO 2026 events.
               </p>
             </div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/80">
-              Registrations opening soon
-            </p>
+            <a
+              href="/register"
+              className="inline-flex items-center justify-center rounded-lg bg-white px-6 py-3 text-base font-semibold text-[#e31837] transition-colors hover:bg-white/90"
+            >
+              Register Now
+            </a>
           </div>
         </section>
       </main>

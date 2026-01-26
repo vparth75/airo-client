@@ -31,6 +31,8 @@ export default function Footer() {
             Contact
           </h3>
           <p>airo@mahindrauniversity.edu.in</p>
+          <p>+91 80731 78344</p>
+          <p>+91 93465 66444</p>
           <p>Mahindra University, Hyderabad</p>
         </div>
 
