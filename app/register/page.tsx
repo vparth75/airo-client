@@ -32,6 +32,7 @@ interface GroupedEvents {
 }
 
 const sportDisplayNames: { [key: string]: string } = {
+  ARCHERY: "Archery",
   ATHLETICS: "Athletics",
   BADMINTON: "Badminton",
   BASKETBALL: "Basketball",
@@ -152,6 +153,7 @@ interface RegistrationModalProps {
 function RegistrationModal({ event, onClose, onSuccess }: RegistrationModalProps) {
   const [collegeName, setCollegeName] = useState("");
   const [captainName, setCaptainName] = useState("");
+  const [captainEmail, setCaptainEmail] = useState("");
   const [captainPhone, setCaptainPhone] = useState("");
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -163,6 +165,10 @@ function RegistrationModal({ event, onClose, onSuccess }: RegistrationModalProps
 
   const validatePhone = (phone: string): boolean => {
     return /^\d{10}$/.test(phone);
+  };
+
+  const validateEmail = (email: string): boolean => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
   const handlePhoneChange = (value: string, field: string, index?: number) => {
@@ -226,6 +232,12 @@ function RegistrationModal({ event, onClose, onSuccess }: RegistrationModalProps
     setError("");
 
     if (event.isTeamEvent) {
+      if (!validateEmail(captainEmail)) {
+        setError("Please enter a valid email address for the captain");
+        setSubmitting(false);
+        return;
+      }
+
       if (!validatePhone(captainPhone)) {
         setError("Captain phone must be exactly 10 digits");
         setSubmitting(false);
@@ -238,6 +250,24 @@ function RegistrationModal({ event, onClose, onSuccess }: RegistrationModalProps
         setSubmitting(false);
         return;
       }
+
+      // Check for duplicate names
+      const allNames = [captainName.trim().toLowerCase(), ...teamMembers.map((m) => m.name.trim().toLowerCase())];
+      const uniqueNames = new Set(allNames);
+      if (uniqueNames.size !== allNames.length) {
+        setError("Each team member must have a unique name");
+        setSubmitting(false);
+        return;
+      }
+
+      // Check for duplicate phone numbers
+      const allPhones = [captainPhone, ...teamMembers.map((m) => m.phone)];
+      const uniquePhones = new Set(allPhones);
+      if (uniquePhones.size !== allPhones.length) {
+        setError("Each team member must have a unique phone number");
+        setSubmitting(false);
+        return;
+      }
     }
 
     try {
@@ -246,6 +276,7 @@ function RegistrationModal({ event, onClose, onSuccess }: RegistrationModalProps
 
       if (event.isTeamEvent) {
         body.captainName = captainName;
+        body.captainEmail = captainEmail;
         body.captainPhone = captainPhone;
         body.teamMembers = teamMembers;
       }
@@ -343,6 +374,17 @@ function RegistrationModal({ event, onClose, onSuccess }: RegistrationModalProps
                     />
                   </div>
                   <div>
+                    <label className="mb-1 block text-xs text-white/60">Email *</label>
+                    <input
+                      type="email"
+                      required
+                      value={captainEmail}
+                      onChange={(e) => setCaptainEmail(e.target.value)}
+                      className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 focus:border-[#e31837] focus:outline-none"
+                      placeholder="captain@email.com"
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
                     <label className="mb-1 block text-xs text-white/60">Phone *</label>
                     <input
                       type="tel"
@@ -451,10 +493,10 @@ function RegistrationModal({ event, onClose, onSuccess }: RegistrationModalProps
             {submitting ? (
               <span className="flex items-center justify-center gap-2">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-                Processing...
+                Adding to Cart...
               </span>
             ) : (
-              `Register (₹${event.registrationFee})`
+              `Add to Cart (₹${event.registrationFee})`
             )}
           </button>
         </form>
@@ -662,7 +704,7 @@ export default function RegisterPage() {
                               <span className="text-lg font-semibold text-[#e31837]">
                                 ₹{event.registrationFee}
                               </span>
-                              <p className="text-xs text-white/40">Click to register</p>
+                              <p className="text-xs text-white/40">Click to add to cart</p>
                             </div>
                           </button>
                         ))}

@@ -23,6 +23,7 @@ interface Registration {
   createdAt: string;
   collegeName?: string;
   captainName?: string;
+  captainEmail?: string;
   captainPhone?: string;
   teamMembers?: TeamMember[];
   event: {
@@ -39,6 +40,7 @@ interface Registration {
 }
 
 const sportDisplayNames: { [key: string]: string } = {
+  ARCHERY: "Archery",
   ATHLETICS: "Athletics",
   BADMINTON: "Badminton",
   BASKETBALL: "Basketball",
@@ -70,6 +72,11 @@ export default function CartPage() {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Early bird offer till Feb 3rd
+  const earlyBirdEnd = new Date("2026-02-03T23:59:59+05:30");
+  const now = new Date();
+  const isEarlyBird = now <= earlyBirdEnd;
 
   useEffect(() => {
     if (!user) {
@@ -120,13 +127,21 @@ export default function CartPage() {
 
   const totalPaid = registrations.reduce((sum, r) => sum + r.paidAmount, 0);
 
+    // 20% off if early bird
+    const discount = isEarlyBird ? 0.2 : 0;
+    const discountedTotal = Math.round(totalPaid * (1 - discount));
+
   if (!user) {
     return null;
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <NavBar />
+      <div className="min-h-screen bg-black text-white">
+        {/* Early bird ticker tape */}
+        <div className="w-full bg-gradient-to-r from-[#e31837] to-[#c41530] py-2 px-4 text-center text-sm font-semibold text-white animate-marquee whitespace-nowrap">
+          Early bird offer till Feb 3rd: <span className="font-bold">20% off</span> on all registration fees!
+        </div>
+        <NavBar />
 
       <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
         <motion.div
@@ -238,9 +253,14 @@ export default function CartPage() {
                           
                           <div className="border-b border-white/10 pb-3">
                             <p className="text-xs font-medium text-[#e31837] uppercase tracking-wide mb-1">Captain</p>
-                            <div className="flex items-center justify-between">
-                              <p className="text-sm text-white font-medium">{registration.captainName}</p>
-                              <p className="text-sm text-white/60">{registration.captainPhone}</p>
+                            <div className="space-y-1">
+                              <div className="flex items-center justify-between">
+                                <p className="text-sm text-white font-medium">{registration.captainName}</p>
+                                <p className="text-sm text-white/60">{registration.captainPhone}</p>
+                              </div>
+                              {registration.captainEmail && (
+                                <p className="text-sm text-white/60">{registration.captainEmail}</p>
+                              )}
                             </div>
                           </div>
                           
@@ -303,12 +323,22 @@ export default function CartPage() {
                   </div>
                   <div className="text-right">
                     <p className="text-white/60">Total Amount</p>
-                    <p className="text-2xl font-bold text-[#e31837]">
-                      ₹{totalPaid.toLocaleString()}
-                    </p>
+                      <p className="text-2xl font-bold text-[#e31837]">
+                        ₹{discountedTotal.toLocaleString()}
+                        {isEarlyBird && (
+                          <span className="ml-2 text-base font-normal text-white/60 line-through">₹{totalPaid.toLocaleString()}</span>
+                        )}
+                      </p>
                   </div>
                 </div>
               </div>
+
+                <button
+                  disabled
+                  className="mt-6 w-full rounded-lg bg-[#e31837] py-3 font-semibold text-white opacity-60 cursor-not-allowed"
+                >
+                  Pay Now
+                </button>
 
               <Link
                 href="/register"
